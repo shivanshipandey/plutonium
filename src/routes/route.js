@@ -89,8 +89,8 @@ router.get("/films/:filmId", function(req, res){
 
        let filmId = req.params.filmId
 
-       //iterate all the films
-       //search for a film whose id matches with the id recevied in request
+//        //iterate all the films
+//        //search for a film whose id matches with the id recevied in request
        for(let i = 0; i < films.length; i++){
            let film = films[i]
            if(film.id == filmId) {
@@ -102,6 +102,27 @@ router.get("/films/:filmId", function(req, res){
        //if there is no match give an error response
        res.send("The film id doesn't match any movie")
 })
+
+
+router.get("/array", function(req,res){
+
+    let arr = [1,2,3,5,6,7]
+//Consecutive number - sum of given numbers = missing number
+
+    let total=0;
+    for( var i in arr){
+        total += arr[i] // total = total + arr [i] = 1 + 2 =3 +3 =6 +5 =11 +6 =17+ 7 = 24
+    }
+
+    let lastDigit = arr.pop()
+    let sumOfNumbers = lastDigit * ( lastDigit + 1)/2
+// sum n*(n+1)/2, given in hints of the question
+let missingNumber = sumOfNumbers - total
+
+req.send({ data : missingNumber });
+})
+
+
 
 module.exports = router;
 // adding this comment for no reason
