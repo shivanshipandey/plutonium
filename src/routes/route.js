@@ -58,11 +58,8 @@ router.get('/get-/movie/:idNumber', function(req, res){
 
     let index=req.params.idNumber;
 
-    // if(index > Movies.length){
-    //     return res.send("plz insert valid id")
-    // }else{
         res.send(Movies[index])
-    // }
+    
        
 })
 
