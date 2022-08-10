@@ -104,6 +104,9 @@ router.get("/films/:filmId", function(req, res){
 })
 
 
+//ANSWER 1
+
+
 router.get("/array", function(req,res){
 
     let arr = [1,2,3,5,6,7]
@@ -119,10 +122,37 @@ router.get("/array", function(req,res){
 // sum n*(n+1)/2, given in hints of the question
 let missingNumber = sumOfNumbers - total
 
-req.send({ data : missingNumber });
+res.send({ data : missingNumber });
 })
 
 
+
+
+
+//ANSWER 2 
+
+router.get("/Solution", function (req, res) {
+
+let Arr= [33, 34, 35, 37, 38]
+let number= Arr.length 
+
+let grandTotal = 0;
+for (var i in Arr) {
+    grandTotal += Arr[i]; //grnadtotal= grandtotal + Arr[i]
+    // 33 + 0 =33 + 34 = 67 + 35 = 102 + 37 = 139 + 38 = 177 
+}
+
+let firstNumber= Arr[0]
+let lastNumber= Arr.pop()
+
+let consecutiveSum= (number + 1) * (firstNumber+ lastNumber ) / 2
+let numberMissing= consecutiveSum - grandTotal
+//consecutive sum = 33 + 34+ 37+ 36 + 38 = 213
+// grandtotal = 177
+// missing number = consective - grandtotal = 213 - 177 = 36
+res.send(  { data: numberMissing  }  );
+
+});
 
 module.exports = router;
 // adding this comment for no reason
