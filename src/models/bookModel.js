@@ -5,11 +5,13 @@ const bookSchema = new mongoose.Schema( {
     authorName: String, 
     tags: [String],
     
-    isPublished: Boolean,
+    stockAvailable: Boolean,
     prices: {
         indianPrice: String,
         europePrice: String,
     },
+    year: Number,
+    totalPages: Number,
     sales: {type: Number, default: 10}
 }, { timestamps: true });
 
