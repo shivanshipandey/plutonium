@@ -1,11 +1,21 @@
 const { count } = require("console")
 const BookModel= require("../models/bookModel")
+const authorModel= require("../models/authorModel")
 
-const createBook= async function (req, res) {
-    let data= req.body
-
-    let savedData= await BookModel.create(data)
+const createNewBook= async function (req, res) {
+    let bookData= req.body
+    let authorId= bookData.author_id
+    if(!authorId){
+        return res.send({msg: "Author Id is mandatory"})
+    }
+    let savedData= await BookModel.create(bookData)
     res.send({msg: savedData})
+}
+
+const createNewAuthor= async function(req,res){
+    let authorData= req.body
+    let data= await authorModel.create(authorData)
+    res.send({msg: data})
 }
 
 const getBooksData= async function (req, res) {
@@ -15,6 +25,25 @@ const getBooksData= async function (req, res) {
     else res.send({msg: "No books found" , condition: false})
 }
 
+const booksByChetanBhagat= async function(req,res){
+    let name= await BookModel.find({ author_name: "Chetan Bhagat", author_id: 1 })
+    res.send({ msg: name})
+}
+
+const twoStates= async function(req,res){
+    let newName= await BookModel.findOneAndUpdate({ name: "Two states"},{$set: {price: 100}})
+    let value = newName.author_id
+    let price = newName.price
+    let newData = await authorModel.find({ author_id: value}).select({author_name: 1, price: 1})
+    res.send({msg: price, newData})
+}
+
+const findBook = async function(req,res){
+    let books= await BookModel.find( { price : { $gte: 50, $lte: 100} } )
+    let newBooks= books.map(x=>x.author_id)
+    let finalBooks= await authorModel.find({author_id: newBooks}).select({author_name : 1, _id : 0})
+    res.send({ msg: finalBooks})
+}
 
 const updateBooks= async function (req, res) {
     let data = req.body // {sales: "1200"}
@@ -53,7 +82,11 @@ const deleteBooks= async function (req, res) {
 
 
 
-module.exports.createBook= createBook
+module.exports.findBook= findBook
+module.exports.twoStates= twoStates
+module.exports.booksByChetanBhagat= booksByChetanBhagat
+module.exports.createNewAuthor= createNewAuthor
+module.exports.createNewBook= createNewBook
 module.exports.getBooksData= getBooksData
 module.exports.updateBooks= updateBooks
 module.exports.deleteBooks= deleteBooks
