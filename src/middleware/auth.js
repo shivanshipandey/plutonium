@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const validate = async function (req, res, next) {
   //check the token in request header
   //validate this token
+  try{
   let token = req.headers["x-auth-token"];
   let userId = req.params.userId;
   let user = await userModel.findById(userId);
@@ -23,12 +24,15 @@ const validate = async function (req, res, next) {
     "functionup-thorium"
   );
   res.setHeader("x-auth-token", token);
-  next()
+} catch(error){
+  res.status(201).send(error.message)
 }
+};
 
 
 const authorise =async  function (req, res, next) {
   // comapre the logged in user's id and the id in request
+  try{
   let token = req.headers["x-auth-token"]
   let userId = req.params.userId;
   let user = await userModel.findById(userId);
@@ -48,6 +52,9 @@ const authorise =async  function (req, res, next) {
   if (userToBeModified != userLoggedIn) return res.send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
 
   next()
+  }catch(error){
+    res.status(201).send(error.message)
+  }
 }
 
 module.exports.validate = validate

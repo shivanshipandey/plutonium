@@ -43,3 +43,10 @@ If present, check that the token is valid.
 
 ``` 
 
+ Assignment: implement try catch and status codes in the previous assignment on JWT
+
+ 200- succesful
+ 404- user not found
+ 403- not authorized
+ 401- Invalid Token
+ 500- server error

@@ -7,13 +7,17 @@ const createUser = async function (abcd, xyz) {
   //You can name the req, res objects anything.
   //but the first parameter is always the request 
   //the second parameter is always the response
+  try{
   let data = abcd.body;
   let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
   xyz.send({ msg: savedData });
+  }catch(error){
+    res.status(500).send(error.message)
+  }
 };
 
 const loginUser = async function (req, res) {
+  try{
   let userName = req.body.emailId;
   let password = req.body.password;
 
@@ -22,6 +26,7 @@ const loginUser = async function (req, res) {
     return res.send({
       status: false,
       msg: "username or the password is not corerct",
+    
     });
 
   // Once the login is successful, create the jwt token with sign function
@@ -41,11 +46,13 @@ const loginUser = async function (req, res) {
   );
   res.setHeader("x-auth-token", token);
   res.send({ status: true, data: token });
-  
+  }catch(error){
+    res.status(404).send(error.message)
+  }
 };
 
 const getUserData = async function (req, res) {
- 
+ try{
   
   // If a token is present then decode the token with verify function
   // verify takes two inputs:
@@ -57,6 +64,9 @@ const getUserData = async function (req, res) {
   let user = await userModel.findById(userId);  
 
   res.send({ status: true, data: user});
+ }catch(error){
+  res.status(401).send(error.message)
+ }
 };
 
 const updateUser = async function (req, res) {
@@ -64,7 +74,7 @@ const updateUser = async function (req, res) {
 // Check if the token is present
 // Check if the token present is a valid token
 // Return a different error message in both these cases
-
+try{
   let userId = req.params.userId;
   let user = await userModel.findById(userId);
   //Return an error if no user with the given id exists in the db
@@ -75,9 +85,14 @@ const updateUser = async function (req, res) {
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
   res.send({ status: true, data: updatedUser });
-};
+}catch(error){
+  res.status(401).send(error.message)
+}
+
+}
 
 const postMessage = async function (req, res) {
+  try{
     let message = req.body.message
     // Check if the token is present
     // Check if the token present is a valid token
@@ -95,6 +110,9 @@ const postMessage = async function (req, res) {
 
     //return the updated user document
     return res.send({status: true, data: updatedUser})
+  }catch(error){
+    res.status(401).send(error,message)
+  }
 }
 
 module.exports.createUser = createUser;
