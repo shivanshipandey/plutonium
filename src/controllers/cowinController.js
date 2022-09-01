@@ -120,12 +120,9 @@ let getCitiesWithTemp = async function (req, res) {
         for (i=0; i<cities.length; i++){
             let obj={ city:cities[i]}
 
-            let options={
-                method : "get",
-                url: `http://api.openweathermap.org/data/2.5/weather?q=${cities[i]}&appid=1362dae990936264cdd25b4ceb4d9f18`
-            }
-            let result = await axios(options)
-
+            
+            let result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cities[i]}&appid=1362dae990936264cdd25b4ceb4d9f18`)
+console.log(result.data.main.temp)
             obj.temp= result.data.main.temp
             cityObjArray.push(obj)
         }
@@ -136,6 +133,21 @@ let getCitiesWithTemp = async function (req, res) {
         }
 }
 
+
+let memeQuestion = async function (req, res){
+    try {
+        let options = {
+            method: "post",
+            url: `https://api.imgflip.com/caption_image?template_id=438680&text0=so, this is my final step for today'\''s assignment&text1=le ERROR...&username=chewie12345&password=meme@123`
+        }
+        let result = await axios(options)
+        res.send({data: result.data})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ msg: err.message })
+    }
+}
+module.exports.memeQuestion=memeQuestion
 module.exports.getCitiesWithTemp = getCitiesWithTemp
 module.exports.getWeather = getWeather
 module.exports.getStates = getStates
