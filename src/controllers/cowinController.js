@@ -112,42 +112,43 @@ let getWeather = async function (req, res) {
 }
 
 
-
 let getCitiesWithTemp = async function (req, res) {
+    let sortedCity = []
     try {
-        let cities = ["Bangaluru", "Mumbai", "Delhi", "Chennai", "London", "Moscow"]
-        let cityObjArray=[]
-        for (i=0; i<cities.length; i++){
-            let obj={ city:cities[i]}
+        let city = ["Bengaluru", "Mumbai", "Delhi", "Kolkata", "Chennai", "London", "Moscow"]
+        for (let i = 0; i < city.length; i++) {
+            q = city[i]
+            var options = {
+                method: "get",
+                url: `http://api.openweathermap.org/data/2.5/weather?q=${q}&appid=1362dae990936264cdd25b4ceb4d9f18`
+            }
+            let result = await axios(options)
 
-            
-            let result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cities[i]}&appid=1362dae990936264cdd25b4ceb4d9f18`)
-console.log(result.data.main.temp)
-            obj.temp= result.data.main.temp
-            cityObjArray.push(obj)
+            sortedCity.push({ city: city[i], temp: result.data.main.temp, })
         }
-        let sorted = cityObjArray.sort( function(a,b){ return a.temp - b.temp})
-        res.status(200).send({status: true, data: sorted})
-        }catch(err){
-            res.status(500).send({ msg: err.message })
-        }
+        res.status(200).send({ data: sortedCity.sort((a, b) => a.temp - b.temp) })
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send({ msg: err.message })
+    }
 }
 
 
-let memeQuestion = async function (req, res){
+let memeQuestion = async function (req, res) {
     try {
         let options = {
             method: "post",
             url: `https://api.imgflip.com/caption_image?template_id=438680&text0=so, this is my final step for today'\''s assignment&text1=le ERROR...&username=chewie12345&password=meme@123`
         }
         let result = await axios(options)
-        res.send({data: result.data})
+        res.send({ data: result.data })
     } catch (error) {
         console.log(error)
         res.status(500).send({ msg: err.message })
     }
 }
-module.exports.memeQuestion=memeQuestion
+module.exports.memeQuestion = memeQuestion
 module.exports.getCitiesWithTemp = getCitiesWithTemp
 module.exports.getWeather = getWeather
 module.exports.getStates = getStates
